@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTU SGPA Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6f7ff; /* Light blue background color */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: url('https://wp.globaluniversitysystems.com/gisma/wp-content/uploads/sites/5/2023/09/MEng-CS-GettyImages-1488457074.jpg?w=2048'); /* Replace with your image file */
+            background-size: cover;
+            
+        }
+
+        #container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        input {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #ff7043; /* Coral color for the button */
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff5733; /* Slightly darker shade on hover */
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>VTU SGPA Calculator</h1>
+        <h3>6th Semester 21 Scheme</h3> 
+        
+        <label for="subject">Enter marks for each subject:</label>
+        <div id="subjectInputs">
+            <!-- Input fields will be added dynamically with JavaScript -->
+        </div>
+        
+        <button onclick="calculateSGPA()">Calculate SGPA</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateSGPA() {
+            // Dynamically collect input values
+            let initialMarks = Array.from(document.querySelectorAll('.initial-mark')).map(input => parseFloat(input.value));
+            
+            // Make an AJAX request to a server-side script
+            fetch('/calculate_sgpa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ initialMarks }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result on the page
+                document.getElementById('result').innerHTML = `SGPA: ${data.sgpa.toFixed(2)}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Dynamically add input fields based on the number of subjects
+        const subjectCodes = ['21CS61: Software Engineering & Project Management', '21CS62: Fullstack Development', '21CS63:Computer Graphics and Fundamentals of Image Processing', '21XX64x: Professional Elective Course-I', '21XX65x: Open Elective Course-I', '21CSL66: Computer Graphics and Image Processing Laboratory', '21CSMP67: Mini Project', '21INT68: Internship'];
+
+        for (let i = 0; i < subjectCodes.length; i++) {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'initial-mark';
+            input.placeholder = `Enter marks for ${subjectCodes[i]}`;
+            subjectInputs.appendChild(input);
+        }
+    </script>
+</body>
+</html>
