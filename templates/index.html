@@ -115,12 +115,25 @@
         const subjectCodes = ['21CS61: Software Engineering & Project Management', '21CS62: Fullstack Development', '21CS63:Computer Graphics and Fundamentals of Image Processing', '21XX64x: Professional Elective Course-I', '21XX65x: Open Elective Course-I', '21CSL66: Computer Graphics and Image Processing Laboratory', '21CSMP67: Mini Project', '21INT68: Internship'];
 
         for (let i = 0; i < subjectCodes.length; i++) {
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.className = 'initial-mark';
-            input.placeholder = `Enter marks for ${subjectCodes[i]}`;
-            subjectInputs.appendChild(input);
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.maxLength = 3;
+    input.min = 0; // Ensures values are not negative
+    input.max = 100; // Ensures values are not more than 100
+    input.className = 'initial-mark';
+    input.placeholder = `Enter marks for ${subjectCodes[i]}`;
+
+    // Add an event listener to validate input
+    input.addEventListener('input', function () {
+        if (input.value > 100) {
+            input.value = 100; // Resets the value to 100 if it's greater than 100
+        } else if (input.value < 0) {
+            input.value = 0; // Resets the value to 0 if it's less than 0
         }
+    });
+
+    subjectInputs.appendChild(input);
+}
     </script>
 </body>
 </html>
